@@ -47,7 +47,7 @@ class Board:
                 pygame.draw.rect(screen,O_COLOR_WIN,(col*self.SQ_SIZE+1,row*self.SQ_SIZE+1,self.SQ_SIZE-2,self.SQ_SIZE-2))
                 screen.blit(O_image_win,(col*self.SQ_SIZE+self.SQ_SIZE//2-O_image.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-O_image.get_height()//2))
     
-    def draw_player(self,screen,player,current_player_symbol):
+    def draw_player(self,screen,player,current_player_symbol,timers):
         '''
         Vẽ thông tin người chơi lên màn hình
         '''
@@ -61,7 +61,8 @@ class Board:
             screen.blit(symbol_text,(WIDTH+30,y_offset+30))
 
             # thời gian còn lại
-            time_text=font.render(f"Time: {player.time}s",True,(0,0,0))
+            elapsed_time=timers[i]
+            time_text=font.render(f"Time: {elapsed_time} s",True,(0,0,0))
             screen.blit(time_text,(WIDTH+30,y_offset+60))
 
             if player.symbol==current_player_symbol:

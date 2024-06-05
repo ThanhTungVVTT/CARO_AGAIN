@@ -1,5 +1,7 @@
 from player import Player
 from board import Board
+import pygame,sys
+
 
 class Game:
     def __init__(self):
@@ -10,18 +12,31 @@ class Game:
         self.players=[Player('Player 1','X'),Player('Player 2','O')]
         self.current_player_index=0
         self.winner=None
+        # Khởi tạo các thuộc tính liên quan đến thời gian
+        self.timers={0:self.players[0].time,1:self.players[1].time}
+        self.TIME_EVENT = pygame.USEREVENT
+        pygame.time.set_timer(self.TIME_EVENT, 1000)
+
+
+    def reset_timer(self):
+        '''
+        Reset thời gian của người chơi hiện tại
+        '''
+        self.timers={0:self.players[0].time,1:self.players[1].time}
+        
     def switch_player(self):
         '''
         Chuyển đổi lượt chơi giữa 2 người chơi và cập nhật thông tin người chơi hiện tại
         '''
         self.current_player_index=1-self.current_player_index
+        self.reset_timer()
 
     def get_current_player(self):   
         '''
         Lấy người chơi hiện tại
         '''
         return self.players[self.current_player_index]
-    
+  
 
     
     def handle_click(self,row,col):
@@ -32,8 +47,7 @@ class Game:
         if self.board.temp_mark==(row,col):
             if self.board.update(row,col,player.symbol):
                 self.board.temp_mark=None
-                if self.board.check_win():
-                    
+                if self.board.check_win():                   
                     self.winner=player                  
                     return True
                 self.switch_player()
@@ -41,34 +55,23 @@ class Game:
             self.board.temp_mark=(row,col)
         return False
     
-    def handle_time(self):
-        '''
-        Xử lí thời gian chơi
-        '''
-        player=self.get_current_player()
-        player.time-=1
-        if player.time==0:
-            self.switch_player()
-            player.time=5
-    def update_time(self):
-        '''
-        Cập nhật thời gian còn lại của người chơi hiện tại
-        '''
-        self.get_current_player().time-=1
-    def reset_time(self):
-        '''
-        Reset thời gian còn lại của người chơi hiện tại
-        '''
-        self.get_current_player().time=5
+    def check_time(self):
+        if self.winner:
+            self.timers[self.current_player_index] = self.players[self.current_player_index].time
+        if not self.winner:
+            self.timers[self.current_player_index] -= 1
+            if self.timers[self.current_player_index] <= 0:
+                self.switch_player()
+
+            
+            
 
     def draw_on_board(self,screen):
         '''
         Vẽ game lên màn hình
         '''
         self.board.draw_board(screen)
-        self.board.draw_player(screen,self.players,self.get_current_player().symbol)
-        
-        
+        self.board.draw_player(screen,self.players,self.get_current_player().symbol,self.timers)
 
 
     def reset(self):
@@ -79,3 +82,4 @@ class Game:
         self.board=Board()
         self.current_player_index=0
         self.winner=None
+        self.reset_timer()
