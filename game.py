@@ -4,11 +4,11 @@ import pygame,sys
 
 
 class Game:
-    def __init__(self):
+    def __init__(self,board_size=15):
         '''
         Khởi tạo game với bảng chơi, danh sách người chơi và các thuộc tính cần thiết
         '''
-        self.board=Board()
+        self.board=Board(size=board_size)
         self.players=[Player('Player 1','X'),Player('Player 2','O')]
         self.current_player_index=0
         self.winner=None
