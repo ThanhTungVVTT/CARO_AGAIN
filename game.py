@@ -9,15 +9,10 @@ from config import *
 # Khởi tạo pygame
 pygame.init()
 
-# Kích thước cửa sổ
-
-# Màu sắc
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
 
 
 board=Board()
-
+board_size=15
 screen = pygame.display.set_mode((WIDTH + board.ADD_WIDTH, HEIGHT))
 pygame.display.set_caption('Game Caro')
 clock = pygame.time.Clock()
@@ -174,7 +169,4 @@ def main():
         pygame.display.update()
         clock.tick(60)
 
-# Bắt đầu chương trình
-if __name__ == "__main__":
-    board_size = 15
-    main()
+
