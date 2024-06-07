@@ -16,14 +16,28 @@ OFFSET=200
 
 
 # tải hình ảnh cho X,O
-X_image=pygame.image.load('assets/images/X.png')
-O_image=pygame.image.load('assets/images/O.png')
-X_image_win=pygame.image.load('assets/images/X_win.png')
-O_image_win=pygame.image.load('assets/images/O_win.png')
+#15x15
+X_image_15x15=pygame.image.load('assets/images/X_15x15.png')
+O_image_15x15=pygame.image.load('assets/images/O_15x15.png')
+X_image_win_15x15=pygame.image.load('assets/images/X_WIN_15X15.png')
+O_image_win_15x15=pygame.image.load('assets/images/O_WIN_15X15.png')
+#7x7
+X_image_7x7=pygame.image.load('assets/images/X_7x7.png')
+O_image_7x7=pygame.image.load('assets/images/O_7x7.png')
+X_image_win_7x7=pygame.image.load('assets/images/X_WIN_7X7.png')
+O_image_win_7x7=pygame.image.load('assets/images/O_WIN_7X7.png')
+#3x3
+X_image_3x3=pygame.image.load('assets/images/X_3x3.png')
+O_image_3x3=pygame.image.load('assets/images/O_3x3.png')
+X_image_win_3x3=pygame.image.load('assets/images/X_WIN_3X3.png')
+O_image_win_3x3=pygame.image.load('assets/images/O_WIN_3X3.png')
 
-
+# tải hình ảnh cho background, play, options, quit
 back_ground_image=pygame.image.load('assets/images/Background.png')
 font=pygame.font.Font('assets/images/font.ttf',50)
 image_play=pygame.image.load('assets/images/Play Rect.png')
 image_options=pygame.image.load('assets/images/Options Rect.png')
 image_quit=pygame.image.load('assets/images/Quit Rect.png')
+
+volume_image_on=pygame.image.load('assets/images/volume_on.png')
+volume_image_off=pygame.image.load('assets/images/volume_off.png')

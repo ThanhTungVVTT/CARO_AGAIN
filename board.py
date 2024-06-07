@@ -30,9 +30,19 @@ class Board:
                 elif self.last_mark==(row,col):
                     pygame.draw.rect(screen,HIGHTLIGHT_COLOR,(col*self.SQ_SIZE+1,row*self.SQ_SIZE+1,self.SQ_SIZE-2,self.SQ_SIZE-2),0)
                 if self.grid[row][col]=='X':
-                    screen.blit(X_image,(col*self.SQ_SIZE+self.SQ_SIZE//2-X_image.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-X_image.get_height()//2))
+                    if self.size==3:
+                        screen.blit(X_image_3x3,(col*self.SQ_SIZE+self.SQ_SIZE//2-X_image_3x3.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-X_image_3x3.get_height()//2))
+                    elif self.size==7:
+                        screen.blit(X_image_7x7,(col*self.SQ_SIZE+self.SQ_SIZE//2-X_image_7x7.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-X_image_7x7.get_height()//2))
+                    elif self.size==15:
+                        screen.blit(X_image_15x15,(col*self.SQ_SIZE+self.SQ_SIZE//2-X_image_15x15.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-X_image_15x15.get_height()//2))
                 elif self.grid[row][col]=='O':
-                    screen.blit(O_image,(col*self.SQ_SIZE+self.SQ_SIZE//2-O_image.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-O_image.get_height()//2))
+                    if self.size==3:
+                        screen.blit(O_image_3x3,(col*self.SQ_SIZE+self.SQ_SIZE//2-O_image_3x3.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-O_image_3x3.get_height()//2))
+                    elif self.size==7:
+                        screen.blit(O_image_7x7,(col*self.SQ_SIZE+self.SQ_SIZE//2-O_image_7x7.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-O_image_7x7.get_height()//2))
+                    elif self.size==15:
+                        screen.blit(O_image_15x15,(col*self.SQ_SIZE+self.SQ_SIZE//2-O_image_15x15.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-O_image_15x15.get_height()//2))
         if self.check_win():
             winning_squares=self.check_win()
             self.draw_when_win(screen,winning_squares)
@@ -42,10 +52,20 @@ class Board:
         for row,col in winning_squares:
             if self.grid[row][col]=='X':
                 pygame.draw.rect(screen,X_COLOR_WIN,(col*self.SQ_SIZE+1,row*self.SQ_SIZE+1,self.SQ_SIZE-2,self.SQ_SIZE-2))
-                screen.blit(X_image_win,(col*self.SQ_SIZE+self.SQ_SIZE//2-X_image.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-X_image.get_height()//2))
+                if self.size==3:
+                    screen.blit(X_image_win_3x3,(col*self.SQ_SIZE+self.SQ_SIZE//2-X_image_win_3x3.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-X_image_win_3x3.get_height()//2))
+                elif self.size==7:
+                    screen.blit(X_image_win_7x7,(col*self.SQ_SIZE+self.SQ_SIZE//2-X_image_win_7x7.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-X_image_win_7x7.get_height()//2))
+                elif self.size==15:
+                    screen.blit(X_image_win_15x15,(col*self.SQ_SIZE+self.SQ_SIZE//2-X_image_win_15x15.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-X_image_win_15x15.get_height()//2))
             else:
                 pygame.draw.rect(screen,O_COLOR_WIN,(col*self.SQ_SIZE+1,row*self.SQ_SIZE+1,self.SQ_SIZE-2,self.SQ_SIZE-2))
-                screen.blit(O_image_win,(col*self.SQ_SIZE+self.SQ_SIZE//2-O_image.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-O_image.get_height()//2))
+                if self.size==3:
+                    screen.blit(O_image_win_3x3,(col*self.SQ_SIZE+self.SQ_SIZE//2-O_image_win_3x3.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-O_image_win_3x3.get_height()//2))
+                elif self.size==7:
+                    screen.blit(O_image_win_7x7,(col*self.SQ_SIZE+self.SQ_SIZE//2-O_image_win_7x7.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-O_image_win_7x7.get_height()//2))
+                elif self.size==15:
+                    screen.blit(O_image_win_15x15,(col*self.SQ_SIZE+self.SQ_SIZE//2-O_image_win_15x15.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-O_image_win_15x15.get_height()//2))
     
     def draw_player(self,screen,player,current_player_symbol,timers):
         '''
@@ -85,20 +105,28 @@ class Board:
         for row in range(self.size):
             for col in range(self.size):
                 if self.grid[row][col]!='':
-                    winning_squares=self.check_five(row,col)
+                    winning_squares=self.check_cell(row,col)
                     if winning_squares:
                         return winning_squares
                     
         return []
     
-    def check_five(self,row,col):
+    def check_cell(self,row,col):
         '''
         Kiểm tra xem có 5 ký hiệu liên tiếp theo hàng ngang, hàng dọc,đường chéo không
         '''
+        if self.size==15:
+            win_count=5
+        elif self.size==7:
+            win_count=4
+        elif self.size==3:
+            win_count=3
+        else:
+            win_count=5
         directions=[(0,1),(1,0),(1,1),(1,-1)]
         for d in directions:
             count,winning_squares=self.count_direction(row,col,d)
-            if count>=5:
+            if count>=win_count:
                 return winning_squares
         return []        
 

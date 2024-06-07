@@ -9,8 +9,6 @@ from config import *
 # Khởi tạo pygame
 pygame.init()
 
-
-
 board=Board()
 board_size=15
 screen = pygame.display.set_mode((WIDTH + board.ADD_WIDTH, HEIGHT))

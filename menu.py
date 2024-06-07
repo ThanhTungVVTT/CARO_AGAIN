@@ -19,28 +19,19 @@ class Menu:
                             Button(image=None, pos=(WIDTH + board.ADD_WIDTH - 150, HEIGHT - 100),
                                   text_input="MENU", font=get_font(40), base_color="black", hovering_color=(0, 0, 200))
         ]
-        # self.VOLUME_BUTTON = Button(image=None, pos=(WIDTH + board.ADD_WIDTH - 150, HEIGHT - 50),
-        #                             text_input="VOLUME", font=get_font(40) base_color,="black", hovering_color=(0, 0, 200))
-        
-        # self.MENU_BUTTON = Button(image=None, pos=(WIDTH + board.ADD_WIDTH - 150, HEIGHT - 100),
-        #                           text_input="MENU", font=get_font(40), base_color="black", hovering_color=(0, 0, 200))
+
         self.main_menu_buttons=[Button(image=None,pos=((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2-50),text_input="PLAY",font=get_font(40),base_color="#d7fcd4",hovering_color=(0,0,200)),
                                 Button(image=None,pos=((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+70),text_input="OPTIONS",font=get_font(40),base_color="#d7fcd4",hovering_color=(0,200,0)),
                                 Button(image=None,pos=((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+190),text_input="QUIT",font=get_font(40),base_color="#d7fcd4",hovering_color=(200,0,0))
                                 ]
-        # self.PLAY_BUTTON=Button(image=None,pos=((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2-50),text_input="PLAY",font=get_font(40),base_color="#d7fcd4",hovering_color=(0,0,200))
-        # self.OPTIONS_BUTTON=Button(image=None,pos=((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+70),text_input="OPTIONS",font=get_font(40),base_color="#d7fcd4",hovering_color=(0,200,0))
-        # self.QUIT_BUTTON=Button(image=None,pos=((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+190),text_input="QUIT",font=get_font(40),base_color="#d7fcd4",hovering_color=(200,0,0))
+
         self.option_buttons=[
             Button(image=None,pos=((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2-50),text_input="3x3",font=get_font(40),base_color="#d7fcd4",hovering_color=(0,0,200)),
             Button(image=None,pos=((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+70),text_input="7x7",font=get_font(40),base_color="#d7fcd4",hovering_color=(0,200,0)),
             Button(image=None,pos=((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+190),text_input="15x15",font=get_font(40),base_color="#d7fcd4",hovering_color=(200,0,0)),
             Button(image=None,pos=((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+310),text_input="BACK",font=get_font(40),base_color="#d7fcd4",hovering_color=(200,0,0))
         ]
-        # self._3x3=Button(image=None,pos=((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2-50),text_input="3x3",font=get_font(40),base_color="#d7fcd4",hovering_color=(0,0,200))
-        # self._7x7=Button(image=None,pos=((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+70),text_input="7x7",font=get_font(40),base_color="#d7fcd4",hovering_color=(0,200,0))
-        # self._15x15=Button(image=None,pos=((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+190),text_input="15x15",font=get_font(40),base_color="#d7fcd4",hovering_color=(200,0,0))
-        # self.BACK_BUTTON=Button(image=None,pos=((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+310),text_input="BACK",font=get_font(40),base_color="#d7fcd4",hovering_color=(200,0,0))
+
         self.confirm_buttons = [
             Button(image=None, pos=(WIDTH // 2, HEIGHT // 2 - 30), text_input="YES", font=get_font(30), base_color="black", hovering_color=(0, 0, 200)),
             Button(image=None, pos=(WIDTH // 2, HEIGHT // 2 + 30), text_input="NO", font=get_font(30), base_color="black", hovering_color=(0, 0, 200))
