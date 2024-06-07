@@ -107,7 +107,7 @@ def game_board(board_size):
                 if 0 <= row < game.board.size and 0 <= col < game.board.size:
                     game.handle_click(row, col)
 
-                if menu.board_buttons[1].checkForInput((x, y)):
+                if menu.board_buttons[2].checkForInput((x, y)):
                     pause = True
                     if menu.confirm_quit():
                         main()
@@ -115,7 +115,10 @@ def game_board(board_size):
                     else:
                         pause = False
                 if menu.board_buttons[0].checkForInput((x, y)):
-                    print('Volume')
+                    menu.state_volume=False
+
+
+
 
         game.draw_on_board(screen)
         menu.draw_board_buttons()
@@ -168,3 +171,6 @@ def main():
         clock.tick(60)
 
 
+
+if __name__ == "__main__":
+    main()

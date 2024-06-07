@@ -40,4 +40,6 @@ image_options=pygame.image.load('assets/images/Options Rect.png')
 image_quit=pygame.image.load('assets/images/Quit Rect.png')
 
 volume_image_on=pygame.image.load('assets/images/volume_on.png')
+volume_image_on=pygame.transform.scale(volume_image_on,(50,50))
 volume_image_off=pygame.image.load('assets/images/volume_off.png')
+volume_image_off=pygame.transform.scale(volume_image_off,(50,50))

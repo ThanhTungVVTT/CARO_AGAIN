@@ -14,8 +14,11 @@ class Menu:
     def __init__(self, screen, board):
         self.screen = screen
         self.board = board
-        self.board_buttons=[ Button(image=None, pos=(WIDTH + board.ADD_WIDTH - 150, HEIGHT - 50),
-                                    text_input="VOLUME", font=get_font(40),base_color="black", hovering_color=(0, 0, 200)),
+        self.state_volume=True
+        self.board_buttons=[ Button(image=volume_image_on, pos=(WIDTH + board.ADD_WIDTH - 150, HEIGHT - 50),
+                                    text_input=None, font=get_font(40),base_color="black", hovering_color=(0, 0, 200)),
+                            Button(image=volume_image_off, pos=(WIDTH + board.ADD_WIDTH - 150, HEIGHT - 50),
+                                    text_input=None, font=get_font(40),base_color="black", hovering_color=(0, 0, 200)),
                             Button(image=None, pos=(WIDTH + board.ADD_WIDTH - 150, HEIGHT - 100),
                                   text_input="MENU", font=get_font(40), base_color="black", hovering_color=(0, 0, 200))
         ]
@@ -111,6 +114,11 @@ class Menu:
             button.update(self.screen)
 
     def draw_board_buttons(self):
-        for button in self.board_buttons:
-            button.changeColor(pygame.mouse.get_pos())
-            button.update(self.screen)
+        if self.state_volume:
+                self.board_buttons[2].changeColor(pygame.mouse.get_pos())
+                self.board_buttons[2].update(self.screen)
+                self.board_buttons[0].update(self.screen)
+        else:
+            self.board_buttons[2].changeColor(pygame.mouse.get_pos())
+            self.board_buttons[2].update(self.screen) 
+            self.board_buttons[1].update(self.screen)
