@@ -15,8 +15,8 @@ screen = pygame.display.set_mode((WIDTH + board.ADD_WIDTH, HEIGHT))
 pygame.display.set_caption('Game Caro')
 clock = pygame.time.Clock()
 
-
 menu=Menu(screen,board)
+
 # Hàm tiện ích để tải phông chữ
 def get_font(size):
     return pygame.font.Font("assets/images/font.ttf", size)
@@ -31,6 +31,7 @@ class Game:
         self.timers = {0: self.players[0].time, 1: self.players[1].time}
         self.menu = Menu(screen, self.board)
         self.TIME_EVENT = pygame.USEREVENT
+        self.sound_state=True
         pygame.time.set_timer(self.TIME_EVENT, 1000)
 
     def reset_timer(self):
@@ -52,13 +53,15 @@ class Game:
                 pygame.display.update()
 
                 if self.board.check_win():
-                    pygame.time.wait(500)
+                    if self.sound_state:
+                        sound_win.play()
+                    pygame.time.wait(1000)
                     self.winner = player
                     result = self.menu.show_winner(self.winner.name)
                     if result == "PLAY":
                         self.reset()
                     elif result == "MENU":
-                        main()
+                        self.main()
                         return True
                 else:
                     self.switch_player()
@@ -84,93 +87,99 @@ class Game:
         self.winner = None
         self.reset_timer()
 
-# Tạo cửa sổ hiển thị
-
-
-# Khởi tạo Menu
-menu = Menu(screen, Board())
-
-def game_board(board_size):
-    global game
-    game = Game(screen, board_size)
-    pause = False
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == game.TIME_EVENT and not pause:
-                game.check_time()
-            if event.type == pygame.MOUSEBUTTONDOWN and not pause:
-                x, y = pygame.mouse.get_pos()
-                row, col = y // game.board.SQ_SIZE, x // game.board.SQ_SIZE
-                if 0 <= row < game.board.size and 0 <= col < game.board.size:
-                    game.handle_click(row, col)
-
-                if menu.board_buttons[2].checkForInput((x, y)):
-                    pause = True
-                    if menu.confirm_quit():
-                        main()
-                        return
-                    else:
-                        pause = False
-                if menu.board_buttons[0].checkForInput((x, y)):
-                    menu.state_volume=False
-
-
-
-
-        game.draw_on_board(screen)
-        menu.draw_board_buttons()
-        pygame.display.update()
-        clock.tick(60)
-
-def option_menu():
-    global board_size
-    while True:
-        menu.draw_option_menu()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if menu.option_buttons[0].checkForInput(pygame.mouse.get_pos()):
-                    board_size = 3
-                    main()
-                if menu.option_buttons[1].checkForInput(pygame.mouse.get_pos()):
-                    board_size = 7
-                    main()
-                if menu.option_buttons[2].checkForInput(pygame.mouse.get_pos()):
-                    board_size = 15
-                    main()
-                if menu.option_buttons[3].checkForInput(pygame.mouse.get_pos()):
-                    main()
-
-        pygame.display.update()
-        clock.tick(60)
-
-def main():
-    while True:
-        menu.draw_main_menu()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if menu.main_menu_buttons[0].checkForInput(pygame.mouse.get_pos()):
-                    game_board(board_size)
-                    return
-                if menu.main_menu_buttons[1].checkForInput(pygame.mouse.get_pos()):
-                    option_menu()
-                    return
-                if menu.main_menu_buttons[2].checkForInput(pygame.mouse.get_pos()):
+    def game_board(self, board_size):
+        self.__init__(self.screen, board_size)
+        pause = False
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                if event.type == self.TIME_EVENT and not pause:
+                    self.check_time()
+                if event.type == pygame.MOUSEBUTTONDOWN and not pause:
+                    x, y = pygame.mouse.get_pos()
+                    row, col = y // self.board.SQ_SIZE, x // self.board.SQ_SIZE
+                    if 0 <= row < self.board.size and 0 <= col < self.board.size:
+                        if self.sound_state:
+                            sound_click_X_O.play()
+                        self.handle_click(row, col)
+                        
+                    if self.menu.board_buttons[2].checkForInput((x, y)):
+                        pause = True
+                        if self.menu.confirm_quit():
+                            self.main()
+                            return
+                        else:
+                            pause = False
+                    if self.menu.state_volume:
+                        if self.menu.board_buttons[0].checkForInput((x, y)):
+                            self.menu.state_volume=False
+                            self.sound_state=False 
+                                                   
+                    else:
+                        if self.menu.board_buttons[1].checkForInput((x, y)):
+                            self.menu.state_volume=True
+                            self.sound_state=True
+                            
+                        
 
-        pygame.display.update()
-        clock.tick(60)
+            self.draw_on_board(self.screen)
+            self.menu.draw_board_buttons()
+            pygame.display.update()
+            clock.tick(60)
 
+    def option_menu(self):
+        global board_size
+        while True:
+            self.menu.draw_option_menu()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    sound_click.play()
+                    if self.menu.option_buttons[0].checkForInput(pygame.mouse.get_pos()):
+                        board_size = 3
+                        self.main()
+                    if self.menu.option_buttons[1].checkForInput(pygame.mouse.get_pos()):
+                        board_size = 7
+                        self.main()
+                    if self.menu.option_buttons[2].checkForInput(pygame.mouse.get_pos()):
+                        board_size = 15
+                        self.main()
+                    if self.menu.option_buttons[3].checkForInput(pygame.mouse.get_pos()):
+                        self.main()
+
+            pygame.display.update()
+            clock.tick(60)
+
+    def main(self):
+        if not pygame.mixer.get_busy():
+            sound_menu.play(-1)
+        while True:
+            self.menu.draw_main_menu()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    sound_click.play()
+                    if self.menu.main_menu_buttons[0].checkForInput(pygame.mouse.get_pos()):
+                        sound_menu.stop()
+                        self.game_board(board_size)
+                        return
+                    if self.menu.main_menu_buttons[1].checkForInput(pygame.mouse.get_pos()):
+                        self.option_menu()
+                        return
+                    if self.menu.main_menu_buttons[2].checkForInput(pygame.mouse.get_pos()):
+                        pygame.quit()
+                        sys.exit()
+            
+            pygame.display.update()
+            clock.tick(60)
 
 
 if __name__ == "__main__":
-    main()
+    game = Game(screen, board_size)
+    game.main()

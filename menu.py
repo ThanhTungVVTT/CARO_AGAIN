@@ -36,12 +36,12 @@ class Menu:
         ]
 
         self.confirm_buttons = [
-            Button(image=None, pos=(WIDTH // 2, HEIGHT // 2 - 30), text_input="YES", font=get_font(30), base_color="black", hovering_color=(0, 0, 200)),
-            Button(image=None, pos=(WIDTH // 2, HEIGHT // 2 + 30), text_input="NO", font=get_font(30), base_color="black", hovering_color=(0, 0, 200))
+            Button(image=None, pos=(WIDTH // 2, HEIGHT // 2), text_input="YES", font=get_font(30), base_color="black", hovering_color=(0, 0, 200)),
+            Button(image=None, pos=(WIDTH // 2, HEIGHT // 2 + 60), text_input="NO", font=get_font(30), base_color="black", hovering_color=(0, 0, 200))
         ]
         self.winner_buttons = [
-            Button(image=None, pos=(WIDTH // 2, HEIGHT // 2 + 30), text_input="PLAY AGAIN", font=get_font(30), base_color="black", hovering_color=(0, 0, 200)),
-            Button(image=None, pos=(WIDTH // 2, HEIGHT // 2 + 90), text_input="MENU", font=get_font(30), base_color="black", hovering_color=(0, 0, 200))
+            Button(image=None, pos=(WIDTH // 2, HEIGHT // 2 ), text_input="PLAY AGAIN", font=get_font(30), base_color="black", hovering_color=(0, 0, 200)),
+            Button(image=None, pos=(WIDTH // 2, HEIGHT // 2+60), text_input="MENU", font=get_font(30), base_color="black", hovering_color=(0, 0, 200))
         ]
 
     def confirm_quit(self):
@@ -56,8 +56,10 @@ class Menu:
                     if self.confirm_buttons[1].checkForInput(pygame.mouse.get_pos()):
                         return False
 
-            pygame.draw.rect(self.screen, WHITE, (WIDTH // 4, HEIGHT // 3, WIDTH // 1.5, HEIGHT // 3))
-            pygame.draw.rect(self.screen, BLACK, (WIDTH // 4, HEIGHT // 3, WIDTH // 1.5, HEIGHT // 3), 2)
+            # pygame.draw.rect(self.screen, WHITE, (WIDTH // 4, HEIGHT // 3, WIDTH // 1.5, HEIGHT // 3))
+            # pygame.draw.rect(self.screen, BLACK, (WIDTH // 4, HEIGHT // 3, WIDTH // 1.5, HEIGHT // 3), 2)
+            pygame.draw.rect(self.screen, WHITE, (110, 220, 480, 240))
+            pygame.draw.rect(self.screen, BLACK, (110, 220, 480, 240), 2)
             confirm_text = get_font(35).render("ARE YOU SURE?", True, BLACK)
             self.screen.blit(confirm_text, (WIDTH // 2 - confirm_text.get_width() // 2, HEIGHT // 3 + 20))
             for button in self.confirm_buttons:
@@ -77,17 +79,22 @@ class Menu:
                     if self.winner_buttons[1].checkForInput(pygame.mouse.get_pos()):
                         return "MENU"
 
-            rect_x = WIDTH // 4
-            rect_y = HEIGHT // 3
-            rect_width = WIDTH // 2
-            rect_height = HEIGHT // 3
+            # rect_x = WIDTH // 4
+            # rect_y = HEIGHT // 3
+            # rect_width = WIDTH // 2
+            # rect_height = HEIGHT // 3
 
-            pygame.draw.rect(self.screen, WHITE, (rect_x, rect_y, rect_width, rect_height))
-            pygame.draw.rect(self.screen, BLACK, (rect_x, rect_y, rect_width, rect_height), 2)
-            winner_text = get_font(35).render(f"{winner} WINS!", True, BLACK)
-            text_rect = winner_text.get_rect(center=(rect_x + rect_width / 2, rect_y + rect_height / 2 - 30))
-            self.screen.blit(winner_text, text_rect)
+            # pygame.draw.rect(self.screen, WHITE, (rect_x, rect_y, rect_width, rect_height))
+            # pygame.draw.rect(self.screen, BLACK, (rect_x, rect_y, rect_width, rect_height), 2)
+            # winner_text = get_font(35).render(f"{winner} WINS!", True, BLACK)
+            # text_rect = winner_text.get_rect(center=(rect_x + rect_width / 2, rect_y + rect_height / 2 - 30))
+            # self.screen.blit(winner_text, text_rect)
+            pygame.draw.rect(self.screen, WHITE, (110, 220, 480, 240))
+            pygame.draw.rect(self.screen, BLACK, (110, 220, 480, 240), 2)
 
+            winner_text = get_font(33).render(f"{winner} WINS!", True, BLACK)
+            text_rect=winner_text.get_rect(topleft=(130,240))
+            self.screen.blit(winner_text,text_rect)
             for button in self.winner_buttons:
                 button.update(self.screen)
             
@@ -114,11 +121,9 @@ class Menu:
             button.update(self.screen)
 
     def draw_board_buttons(self):
+        self.board_buttons[2].changeColor(pygame.mouse.get_pos())
+        self.board_buttons[2].update(self.screen)
         if self.state_volume:
-                self.board_buttons[2].changeColor(pygame.mouse.get_pos())
-                self.board_buttons[2].update(self.screen)
-                self.board_buttons[0].update(self.screen)
+            self.board_buttons[0].update(self.screen)
         else:
-            self.board_buttons[2].changeColor(pygame.mouse.get_pos())
-            self.board_buttons[2].update(self.screen) 
             self.board_buttons[1].update(self.screen)
