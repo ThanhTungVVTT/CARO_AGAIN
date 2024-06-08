@@ -112,7 +112,7 @@ class Menu:
 
     def draw_main_menu(self):
         self.screen.blit(back_ground_image,(0,0))
-        MENU_TEXT=get_font(50).render("MAIN MENU",True,(255,255,255))
+        MENU_TEXT=get_font(50).render("CARO GAME",True,(255,255,255))
         MENU_RECT=MENU_TEXT.get_rect(center=(((WIDTH+board.ADD_WIDTH)//2),HEIGHT//2-200))
         self.screen.blit(MENU_TEXT,MENU_RECT)
 
