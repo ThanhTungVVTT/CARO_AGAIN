@@ -5,6 +5,7 @@ WHITE=(255,255,255)
 BLACK=(0,0,0)
 RED=(255,0,0)
 BLUE=(0,0,255)
+BG_BOARD=(0,120,255)
 HIGHTLIGHT_COLOR=(255,234,167)
 X_COLOR_WIN=(52,87,154)
 O_COLOR_WIN=(187,33,41)
@@ -47,3 +48,15 @@ sound_click_X_O=pygame.mixer.Sound('assets/sounds/click_X_O_sound.wav')
 sound_win=pygame.mixer.Sound('assets/sounds/sound_win.mp3')
 sound_click=pygame.mixer.Sound('assets/sounds/mouse_click.wav')
 sound_menu=pygame.mixer.Sound('assets/sounds/music_loop_6.mp3')
+
+avatar_O=pygame.image.load('assets/images/avatar_O.png')
+avatar_O=pygame.transform.scale(avatar_O,(120,120))
+avatar_X=pygame.image.load('assets/images/avatar_X.png')
+avatar_X=pygame.transform.scale(avatar_X,(120,120))
+
+group_X=pygame.image.load('assets/images/Group 330.png')
+
+group_O=pygame.image.load('assets/images/Group O.png')
+
+def get_font(size):
+    return pygame.font.Font("assets/fonts/font.ttf", size)

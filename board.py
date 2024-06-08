@@ -1,4 +1,5 @@
 from player import Player
+from timer_countdown import CountdownTimer
 import pygame
 from config import *
 
@@ -15,11 +16,14 @@ class Board:
         self.last_mark=None
         self.SQ_SIZE=WIDTH//self.size
         self.ADD_WIDTH=300
+        self.time1=CountdownTimer(total_time=30,position=(100,100))
+        self.time2=CountdownTimer(total_time=30,position=(100,100))
     def draw_board(self,screen):
         '''
         Vẽ bảng chơi lên màn hình
         '''
         screen.fill(WHITE)
+        pygame.draw.rect(screen, BG_BOARD, (WIDTH, 0, self.ADD_WIDTH, HEIGHT))
         for row in range(self.size):
             for col in range(self.size):
                 rect=pygame.Rect(col*self.SQ_SIZE,row*self.SQ_SIZE,self.SQ_SIZE,self.SQ_SIZE)
@@ -71,22 +75,42 @@ class Board:
         '''
         Vẽ thông tin người chơi lên màn hình
         '''
+
         for i,player in enumerate(player):
-            y_offset=30+i*100
+            avatar_pos=(WIDTH+30,50+i*150)
+            
+            if player.symbol=="X":
+                screen.blit(avatar_X,avatar_pos)
+                avatar_X_pos=(avatar_pos[0]+avatar_X.get_width(),avatar_pos[1]+avatar_X.get_height()//2)
+                group_X_pos=(avatar_pos[0]+avatar_X.get_width()-30,avatar_pos[1]+avatar_X.get_height()-30)
+                screen.blit(group_X,group_X_pos)
+                self.time1.position=(avatar_X_pos[0]+70,avatar_X_pos[1])
+                self.time1.total_time=timers[i]
+                self.time1.draw(screen)
+            else:
+                screen.blit(avatar_O,avatar_pos)
+                avatar_O_pos=(avatar_pos[0]+avatar_O.get_width(),avatar_pos[1]+avatar_O.get_height()//2)
+                group_O_pos=(avatar_pos[0]+avatar_O.get_width()-30,avatar_pos[1]+avatar_O.get_height()-30)
+                screen.blit(group_O,group_O_pos)
+                self.time2.position=(avatar_O_pos[0]+70,avatar_O_pos[1])
+                self.time2.total_time=timers[i]
+                self.time2.draw(screen)
 
-            font=pygame.font.SysFont(None, 36)
-            name_text=font.render(f"{player.name}",True,(0,0,0))
-            screen.blit(name_text,(WIDTH+30,y_offset))
-            symbol_text=font.render(f"Symbol: {player.symbol}",True,(0,0,0))
-            screen.blit(symbol_text,(WIDTH+30,y_offset+30))
+            if player.symbol==current_player_symbol:         
+                if player.symbol=="X":        
+                    self.time1.state_time=True
+                    self.time2.state_time=False
+                    self.time2.reset()
+                        
 
-            # thời gian còn lại
-            elapsed_time=timers[i]
-            time_text=font.render(f"Time: {elapsed_time} s",True,(0,0,0))
-            screen.blit(time_text,(WIDTH+30,y_offset+60))
+                    
+                else:
+                    self.time1.state_time=False
+                    self.time2.state_time=True
+                    self.time1.reset()
+                    
+                      
 
-            if player.symbol==current_player_symbol:
-                pygame.draw.rect(screen,(255,0,0),(WIDTH+25,y_offset-5,OFFSET-30,95),2)
 
     def update(self,row,col,player_symbol):
         '''
@@ -150,6 +174,6 @@ class Board:
             if 0<=new_row<self.size and 0<=new_col<self.size and self.grid[new_row][new_col]==self.grid[row][col]:
                 count+=1
                 winning_squares.append((new_row,new_col))
-            else:
+            else:   
                 break
         return count,winning_squares

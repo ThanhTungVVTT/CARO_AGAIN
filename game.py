@@ -3,7 +3,6 @@ import sys
 from player import Player
 from board import Board
 from menu import Menu
-from button import Button
 from config import *
 
 # Khởi tạo pygame
@@ -30,9 +29,8 @@ class Game:
         self.winner = None
         self.timers = {0: self.players[0].time, 1: self.players[1].time}
         self.menu = Menu(screen, self.board)
-        self.TIME_EVENT = pygame.USEREVENT
         self.sound_state=True
-        pygame.time.set_timer(self.TIME_EVENT, 1000)
+
 
     def reset_timer(self):
         self.timers = {0: self.players[0].time, 1: self.players[1].time}
@@ -61,7 +59,7 @@ class Game:
                     if result == "PLAY":
                         self.reset()
                     elif result == "MENU":
-                        self.main()
+                        self.run()
                         return True
                 else:
                     self.switch_player()
@@ -76,6 +74,9 @@ class Game:
             self.timers[self.current_player_index] -= 1
             if self.timers[self.current_player_index] <= 0:
                 self.switch_player()
+                # Cập nhật thời gian hiển thị cho người chơi tiếp theo
+                self.timers[self.current_player_index] = self.players[self.current_player_index].time
+
 
     def draw_on_board(self, screen):
         self.board.draw_board(screen)
@@ -95,8 +96,6 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                if event.type == self.TIME_EVENT and not pause:
-                    self.check_time()
                 if event.type == pygame.MOUSEBUTTONDOWN and not pause:
                     x, y = pygame.mouse.get_pos()
                     row, col = y // self.board.SQ_SIZE, x // self.board.SQ_SIZE
@@ -108,7 +107,7 @@ class Game:
                     if self.menu.board_buttons[2].checkForInput((x, y)):
                         pause = True
                         if self.menu.confirm_quit():
-                            self.main()
+                            self.run()
                             return
                         else:
                             pause = False
@@ -123,7 +122,7 @@ class Game:
                             self.sound_state=True
                             
                         
-
+    
             self.draw_on_board(self.screen)
             self.menu.draw_board_buttons()
             pygame.display.update()
@@ -141,20 +140,20 @@ class Game:
                     sound_click.play()
                     if self.menu.option_buttons[0].checkForInput(pygame.mouse.get_pos()):
                         board_size = 3
-                        self.main()
+                        self.run()
                     if self.menu.option_buttons[1].checkForInput(pygame.mouse.get_pos()):
                         board_size = 7
-                        self.main()
+                        self.run()
                     if self.menu.option_buttons[2].checkForInput(pygame.mouse.get_pos()):
                         board_size = 15
-                        self.main()
+                        self.run()
                     if self.menu.option_buttons[3].checkForInput(pygame.mouse.get_pos()):
-                        self.main()
+                        self.run()
 
             pygame.display.update()
             clock.tick(60)
 
-    def main(self):
+    def run(self):
         if not pygame.mixer.get_busy():
             sound_menu.play(-1)
         while True:
@@ -182,4 +181,4 @@ class Game:
 
 if __name__ == "__main__":
     game = Game(screen, board_size)
-    game.main()
+    game.run()

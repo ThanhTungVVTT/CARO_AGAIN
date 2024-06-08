@@ -20,7 +20,7 @@ class Menu:
                             Button(image=volume_image_off, pos=(WIDTH + board.ADD_WIDTH - 150, HEIGHT - 50),
                                     text_input=None, font=get_font(40),base_color="black", hovering_color=(0, 0, 200)),
                             Button(image=None, pos=(WIDTH + board.ADD_WIDTH - 150, HEIGHT - 100),
-                                  text_input="MENU", font=get_font(40), base_color="black", hovering_color=(0, 0, 200))
+                                  text_input="MENU", font=get_font(40), base_color="black", hovering_color=(255,0,0))
         ]
 
         self.main_menu_buttons=[Button(image=None,pos=((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2-50),text_input="PLAY",font=get_font(40),base_color="#d7fcd4",hovering_color=(0,0,200)),
