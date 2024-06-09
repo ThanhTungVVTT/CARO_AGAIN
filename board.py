@@ -16,8 +16,7 @@ class Board:
         self.last_mark=None
         self.SQ_SIZE=WIDTH//self.size
         self.ADD_WIDTH=300
-        self.time1=CountdownTimer()
-        self.time2=CountdownTimer()
+        
     def draw_board(self,screen):
         '''
         Vẽ bảng chơi lên màn hình
@@ -71,45 +70,49 @@ class Board:
                 elif self.size==15:
                     screen.blit(O_image_win_15x15,(col*self.SQ_SIZE+self.SQ_SIZE//2-O_image_win_15x15.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-O_image_win_15x15.get_height()//2))
     
-    def draw_player(self,screen,player,current_player_symbol,timers,pause_game):
+    def draw_player(self,screen,player,current_player_symbol,timers):
         '''
         Vẽ thông tin người chơi lên màn hình
         '''
 
         for i,player in enumerate(player):
-            avatar_pos=(WIDTH+30,50+i*150)
-            
-            if player.symbol=="X":
-                screen.blit(avatar_X,avatar_pos)
-                avatar_X_pos=(avatar_pos[0]+avatar_X.get_width(),avatar_pos[1]+avatar_X.get_height()//2)
-                group_X_pos=(avatar_pos[0]+avatar_X.get_width()-30,avatar_pos[1]+avatar_X.get_height()-30)
-                screen.blit(group_X,group_X_pos)
-                self.time1.position=(avatar_X_pos[0]+70,avatar_X_pos[1])
-                self.time1.total_time=timers[i]
-                self.time1.pause_game=pause_game
-                self.time1.draw(screen)
-            else:
-                screen.blit(avatar_O,avatar_pos)
-                avatar_O_pos=(avatar_pos[0]+avatar_O.get_width(),avatar_pos[1]+avatar_O.get_height()//2)
-                group_O_pos=(avatar_pos[0]+avatar_O.get_width()-30,avatar_pos[1]+avatar_O.get_height()-30)
-                screen.blit(group_O,group_O_pos)
-                self.time2.position=(avatar_O_pos[0]+70,avatar_O_pos[1])
-                self.time2.total_time=timers[i]
-                self.time2.pause_game=pause_game
-                self.time2.draw(screen)
+            avatar_pos=(WIDTH+150,80+i*160)
+            elapsed_time=timers[i]
+            font=get_font(15)
+            time_text=font.render(f"Time left:{elapsed_time}",True,BLACK)
 
-            if player.symbol==current_player_symbol:    
-                pygame.draw.rect(screen,RED,(avatar_pos[0]-5,avatar_pos[1]-5,avatar_X.get_width()+10,avatar_X.get_height()+10),5)     
-                if player.symbol=="X":        
-                    self.time1.state_time=True
-                    self.time2.state_time=False
-                    self.time2.reset()
-                               
+            if player.symbol=="X":
+                avatar_X_pos=avatar_X.get_rect(center=avatar_pos)
+                screen.blit(avatar_X,avatar_X_pos)
+                group_X_pos=(avatar_X_pos.right-group_X.get_width(),avatar_X_pos.bottom-group_X.get_height())
+                screen.blit(group_X,group_X_pos)
+                time_text_center=(avatar_X_pos.centerx,avatar_X_pos.bottom+10)
+                time_text_rect=time_text.get_rect(midtop=time_text_center)
+                screen.blit(time_text,time_text_rect)
+            else:
+                avatar_O_pos=avatar_O.get_rect(center=avatar_pos)
+                screen.blit(avatar_O,avatar_O_pos)
+                group_O_pos=(avatar_O_pos.right-group_O.get_width(),avatar_O_pos.bottom-group_O.get_height())
+                screen.blit(group_O,group_O_pos)
+                time_text_center=(avatar_O_pos.centerx,avatar_O_pos.bottom+10)
+                time_text_rect=time_text.get_rect(midtop=time_text_center)
+                screen.blit(time_text,time_text_rect)
+
+            if player.symbol == current_player_symbol:
+                ARROW_SIZE=35
+                if player.symbol == "X":
+                    arrow_pos = (avatar_X_pos.left - ARROW_SIZE, avatar_X_pos.centery)
                 else:
-                    self.time1.state_time=False
-                    self.time2.state_time=True
-                    self.time1.reset()
-                    
+                    arrow_pos = (avatar_O_pos.left - ARROW_SIZE, avatar_O_pos.centery)
+                
+                arrow_shape = [
+                    (arrow_pos[0], arrow_pos[1]),
+                    (arrow_pos[0] -25, arrow_pos[1] - 20),
+                    (arrow_pos[0] -25, arrow_pos[1] + 20)
+                ]
+
+                pygame.draw.polygon(screen, WHITE, arrow_shape)
+                
                       
 
 

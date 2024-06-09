@@ -29,7 +29,8 @@ class Game:
         self.timers = {0: self.players[0].time, 1: self.players[1].time}
         self.menu = Menu(screen, self.board)
         self.sound_state=True
-
+        self.TIME_EVENT=pygame.USEREVENT+1
+        pygame.time.set_timer(self.TIME_EVENT,1000)
  
         # self.turn_start_time=pygame.time.get_ticks()
 
@@ -48,7 +49,7 @@ class Game:
         if self.board.temp_mark == (row, col):
             if self.board.update(row, col, player.symbol):
                 self.board.temp_mark = None
-                self.draw_on_board(self.screen,self.pause_game)
+                self.draw_on_board(self.screen)
                 pygame.display.update()
 
                 if self.board.check_win():
@@ -63,25 +64,23 @@ class Game:
                         self.run()
                         return True
                 else:
-                    self.switch_player()
-                    # self.turn_start_time=pygame.time.get_ticks()
-                    
+                    self.switch_player()                  
         else:
             self.board.temp_mark = (row, col)
         return False
     
-    # def update_time(self):
-    #     if not self.pause:
-    #         elapsed_time=pygame.time.get_ticks()-self.turn_start_time
+    def check_time(self):
+        if self.winner:
+            self.timers[self.current_player_index] = self.players[self.current_player_index].time
+        if not self.winner:
+            self.timers[self.current_player_index] -= 1
+            if self.timers[self.current_player_index] <= 0:
+                self.switch_player()
 
-    #         if elapsed_time>=self.players[self.current_player_index].time*1000:
-    #             self.switch_player()
-    #             self.turn_start_time=pygame.time.get_ticks()
-
-    def draw_on_board(self, screen,pause_game):
+    def draw_on_board(self, screen):
         
         self.board.draw_board(screen)
-        self.board.draw_player(screen, self.players, self.get_current_player().symbol, self.timers,pause_game)
+        self.board.draw_player(screen, self.players, self.get_current_player().symbol, self.timers)
 
     def reset(self):
         self.board = Board(self.board.size)
@@ -97,7 +96,8 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                
+                if event.type==self.TIME_EVENT and not pause:
+                    self.check_time()
                 if event.type == pygame.MOUSEBUTTONDOWN and not pause:
                     x, y = pygame.mouse.get_pos()
                     row, col = y // self.board.SQ_SIZE, x // self.board.SQ_SIZE
@@ -113,10 +113,7 @@ class Game:
                             self.run()
                             return
                         else:
-                            pause = False
-                        
-                        
-                    
+                            pause = False                 
                                                       
                     if self.menu.state_volume:
                         if self.menu.board_buttons[0].checkForInput((x, y)):
