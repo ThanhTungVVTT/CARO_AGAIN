@@ -1,6 +1,6 @@
 
 class Player:
-    def __init__(self, name,symbol,time=3):
+    def __init__(self, name,symbol,time=5):
         '''
         Khởi tạo người chơi với tên, ký hiệu và thời gian chơi mặc định
         '''

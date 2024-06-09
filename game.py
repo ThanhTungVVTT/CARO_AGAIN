@@ -17,11 +17,10 @@ clock = pygame.time.Clock()
 menu=Menu(screen,board)
 
 # Hàm tiện ích để tải phông chữ
-def get_font(size):
-    return pygame.font.Font("assets/images/font.ttf", size)
+
 
 class Game:
-    def __init__(self, screen, board_size):
+    def __init__(self, screen, board_size): 
         self.screen = screen
         self.board = Board(board_size)
         self.players = [Player('Player 1', 'X'), Player('Player 2', 'O')]
@@ -31,12 +30,14 @@ class Game:
         self.menu = Menu(screen, self.board)
         self.sound_state=True
 
+ 
+        # self.turn_start_time=pygame.time.get_ticks()
 
     def reset_timer(self):
         self.timers = {0: self.players[0].time, 1: self.players[1].time}
 
     def switch_player(self):
-        self.current_player_index = 1 - self.current_player_index
+        self.current_player_index = 1-self.current_player_index
         self.reset_timer()
 
     def get_current_player(self):
@@ -47,7 +48,7 @@ class Game:
         if self.board.temp_mark == (row, col):
             if self.board.update(row, col, player.symbol):
                 self.board.temp_mark = None
-                self.draw_on_board(self.screen)
+                self.draw_on_board(self.screen,self.pause_game)
                 pygame.display.update()
 
                 if self.board.check_win():
@@ -63,24 +64,24 @@ class Game:
                         return True
                 else:
                     self.switch_player()
+                    # self.turn_start_time=pygame.time.get_ticks()
+                    
         else:
             self.board.temp_mark = (row, col)
         return False
+    
+    # def update_time(self):
+    #     if not self.pause:
+    #         elapsed_time=pygame.time.get_ticks()-self.turn_start_time
 
-    def check_time(self):
-        if self.winner:
-            self.timers[self.current_player_index] = self.players[self.current_player_index].time
-        if not self.winner:
-            self.timers[self.current_player_index] -= 1
-            if self.timers[self.current_player_index] <= 0:
-                self.switch_player()
-                # Cập nhật thời gian hiển thị cho người chơi tiếp theo
-                self.timers[self.current_player_index] = self.players[self.current_player_index].time
+    #         if elapsed_time>=self.players[self.current_player_index].time*1000:
+    #             self.switch_player()
+    #             self.turn_start_time=pygame.time.get_ticks()
 
-
-    def draw_on_board(self, screen):
+    def draw_on_board(self, screen,pause_game):
+        
         self.board.draw_board(screen)
-        self.board.draw_player(screen, self.players, self.get_current_player().symbol, self.timers)
+        self.board.draw_player(screen, self.players, self.get_current_player().symbol, self.timers,pause_game)
 
     def reset(self):
         self.board = Board(self.board.size)
@@ -90,12 +91,13 @@ class Game:
 
     def game_board(self, board_size):
         self.__init__(self.screen, board_size)
-        pause = False
+        pause=False
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                
                 if event.type == pygame.MOUSEBUTTONDOWN and not pause:
                     x, y = pygame.mouse.get_pos()
                     row, col = y // self.board.SQ_SIZE, x // self.board.SQ_SIZE
@@ -106,11 +108,16 @@ class Game:
                         
                     if self.menu.board_buttons[2].checkForInput((x, y)):
                         pause = True
+                        self.pause_game=True
                         if self.menu.confirm_quit():
                             self.run()
                             return
                         else:
                             pause = False
+                        
+                        
+                    
+                                                      
                     if self.menu.state_volume:
                         if self.menu.board_buttons[0].checkForInput((x, y)):
                             self.menu.state_volume=False
@@ -120,9 +127,8 @@ class Game:
                         if self.menu.board_buttons[1].checkForInput((x, y)):
                             self.menu.state_volume=True
                             self.sound_state=True
-                            
-                        
-    
+                       
+            
             self.draw_on_board(self.screen)
             self.menu.draw_board_buttons()
             pygame.display.update()

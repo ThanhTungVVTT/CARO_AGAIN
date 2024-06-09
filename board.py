@@ -16,8 +16,8 @@ class Board:
         self.last_mark=None
         self.SQ_SIZE=WIDTH//self.size
         self.ADD_WIDTH=300
-        self.time1=CountdownTimer(total_time=30,position=(100,100))
-        self.time2=CountdownTimer(total_time=30,position=(100,100))
+        self.time1=CountdownTimer()
+        self.time2=CountdownTimer()
     def draw_board(self,screen):
         '''
         Vẽ bảng chơi lên màn hình
@@ -71,7 +71,7 @@ class Board:
                 elif self.size==15:
                     screen.blit(O_image_win_15x15,(col*self.SQ_SIZE+self.SQ_SIZE//2-O_image_win_15x15.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-O_image_win_15x15.get_height()//2))
     
-    def draw_player(self,screen,player,current_player_symbol,timers):
+    def draw_player(self,screen,player,current_player_symbol,timers,pause_game):
         '''
         Vẽ thông tin người chơi lên màn hình
         '''
@@ -86,6 +86,7 @@ class Board:
                 screen.blit(group_X,group_X_pos)
                 self.time1.position=(avatar_X_pos[0]+70,avatar_X_pos[1])
                 self.time1.total_time=timers[i]
+                self.time1.pause_game=pause_game
                 self.time1.draw(screen)
             else:
                 screen.blit(avatar_O,avatar_pos)
@@ -94,16 +95,16 @@ class Board:
                 screen.blit(group_O,group_O_pos)
                 self.time2.position=(avatar_O_pos[0]+70,avatar_O_pos[1])
                 self.time2.total_time=timers[i]
+                self.time2.pause_game=pause_game
                 self.time2.draw(screen)
 
-            if player.symbol==current_player_symbol:         
+            if player.symbol==current_player_symbol:    
+                pygame.draw.rect(screen,RED,(avatar_pos[0]-5,avatar_pos[1]-5,avatar_X.get_width()+10,avatar_X.get_height()+10),5)     
                 if player.symbol=="X":        
                     self.time1.state_time=True
                     self.time2.state_time=False
                     self.time2.reset()
-                        
-
-                    
+                               
                 else:
                     self.time1.state_time=False
                     self.time2.state_time=True
