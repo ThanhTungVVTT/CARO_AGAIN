@@ -57,6 +57,8 @@ avatar_X=pygame.transform.scale(avatar_X,(120,120))
 group_X=pygame.image.load('assets/images/Group 330.png')
 
 group_O=pygame.image.load('assets/images/Group O.png')
-
+board_3x3=pygame.image.load('assets/images/3x3_board.png')
+board_7x7=pygame.image.load('assets/images/7x7_board.png')
+board_15x15=pygame.image.load('assets/images/15x15_board.png')
 def get_font(size):
     return pygame.font.Font("assets/fonts/font.ttf", size)
