@@ -3,10 +3,6 @@ class Player:
         self.name = name
         self.symbol = symbol
         self.time=time
-        self.score = 0  # Khởi tạo biến tỉ số cho mỗi người chơi
+        self.score = 0 
 
-    def increase_score(self):
-        self.score += 1
 
-    def get_score(self):
-        return self.score

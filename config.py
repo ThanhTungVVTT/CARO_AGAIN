@@ -9,9 +9,8 @@ BG_BOARD=(0,120,255)
 GRAY=(159,161,165)
 BACKGROUND_MENU_BUTTON=(71,43,58)
 TITLE_COLOR=(181,143,63)
-
+BUTTON_COLOR="#d7fcd4"
 HIGHTLIGHT_COLOR=(255,234,167)
-
 X_COLOR_WIN=(52,87,154)
 O_COLOR_WIN=(187,33,41)
 
@@ -38,12 +37,8 @@ O_image_3x3=pygame.image.load('assets/images/O_3x3.png')
 X_image_win_3x3=pygame.image.load('assets/images/X_WIN_3X3.png')
 O_image_win_3x3=pygame.image.load('assets/images/O_WIN_3X3.png')
 
-# tải hình ảnh cho background, play, options, quit
+
 back_ground_image=pygame.image.load('assets/images/Background.png')
-font=pygame.font.Font('assets/fonts/font.ttf',50)
-image_play=pygame.image.load('assets/images/Play Rect.png')
-image_options=pygame.image.load('assets/images/Options Rect.png')
-image_quit=pygame.image.load('assets/images/Quit Rect.png')
 
 volume_image_on=pygame.image.load('assets/images/volume_on.png')
 volume_image_menu_on=pygame.image.load('assets/images/volume_on_menu.png')
@@ -62,20 +57,19 @@ avatar_O=pygame.transform.scale(avatar_O,(120,120))
 avatar_X=pygame.image.load('assets/images/avatar_X.png')
 avatar_X=pygame.transform.scale(avatar_X,(120,120))
 
-group_X=pygame.image.load('assets/images/Group 330.png')
-
+group_X=pygame.image.load('assets/images/Group X.png')
 group_O=pygame.image.load('assets/images/Group O.png')
+
 board_3x3=pygame.image.load('assets/images/3x3_board.png')
 board_7x7=pygame.image.load('assets/images/7x7_board.png')
 board_15x15=pygame.image.load('assets/images/15x15_board.png')
 
-def get_font(size):
-    return pygame.font.Font("assets/fonts/font.ttf", size)
-
-
 help_image=pygame.image.load('assets/images/help.png')
 help_image=pygame.transform.scale(help_image,(350,350))
 
+
+def get_font(size,font_name,font_type):
+    return pygame.font.Font(f"assets/fonts/{font_name}.{font_type}", size)
 
 
 instructions=["Place the number of pieces (depending on the grid type)",

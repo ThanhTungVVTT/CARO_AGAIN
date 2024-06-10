@@ -79,9 +79,9 @@ class Board:
         for i,player in enumerate(player):
             avatar_pos=(WIDTH+150,80+i*250)
             elapsed_time=timers[i]
-            font=get_font(20)
-            time_text=font.render(f"Time left:{elapsed_time}",True,BLACK)
-            score_text=font.render(f"Score:{player.get_score()}",True,BLACK)
+        
+            time_text=get_font(20,"Designer","otf").render(f"Time left: {elapsed_time}",True,BLACK)
+            score_text=get_font(20,"Designer","otf").render(f"Score: {player.score}",True,BLACK)
 
             if player.symbol=="X":
                 avatar_X_pos=avatar_X.get_rect(center=avatar_pos)
@@ -127,10 +127,13 @@ class Board:
                 ]
 
                 pygame.draw.polygon(screen, WHITE, arrow_shape)
-                
-        
-                      
-
+                  
+    def is_full(self):
+        for row in range(self.size):
+            for col in range(self.size):
+                if self.grid[row][col]=='':
+                    return False
+        return True
 
     def update(self,row,col,player_symbol):
         '''
