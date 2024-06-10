@@ -29,12 +29,9 @@ class Game:
         self.timers = {0: self.players[0].time, 1: self.players[1].time}
         self.menu = Menu(screen, self.board)
         self.sound_state=True
-        self.sound_menu_state=True
-        self.sound_menu_played=False
         self.TIME_EVENT=pygame.USEREVENT+1
         pygame.time.set_timer(self.TIME_EVENT,1000)
- 
-        # self.turn_start_time=pygame.time.get_ticks()
+
 
     def reset_timer(self):
         self.timers = {0: self.players[0].time, 1: self.players[1].time}
@@ -53,16 +50,17 @@ class Game:
                 self.board.temp_mark = None
                 self.draw_on_board(self.screen)
                 pygame.display.update()
-
                 if self.board.check_win():
-                    if self.sound_state:
+                    if self.menu.state_volume:
                         sound_win.play()
                     pygame.time.wait(1000)
                     self.winner = player
+                    self.winner.increase_score()
                     result = self.menu.show_winner(self.winner.name)
                     if result == "PLAY":
                         self.reset()
                     elif result == "MENU":
+                        sound_win.stop()
                         self.run()
                         return True
                 else:
@@ -71,6 +69,7 @@ class Game:
             self.board.temp_mark = (row, col)
         return False
     
+
     def check_time(self):
         if self.winner:
             self.timers[self.current_player_index] = self.players[self.current_player_index].time
@@ -90,11 +89,11 @@ class Game:
         self.winner = None
         self.reset_timer()
 
+
     def game_board(self, board_size):
         self.__init__(self.screen, board_size)
         pause=False
         while True:
-           
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -105,7 +104,7 @@ class Game:
                     x, y = pygame.mouse.get_pos()
                     row, col = y // self.board.SQ_SIZE, x // self.board.SQ_SIZE
                     if 0 <= row < self.board.size and 0 <= col < self.board.size:
-                        if self.sound_state:
+                        if self.menu.state_volume:
                             sound_click_X_O.play()
                         self.handle_click(row, col)
                         
@@ -213,15 +212,13 @@ class Game:
                         pygame.quit()
                         sys.exit()
                     
-                    if self.menu.state_volume_menu:
+                    if self.menu.state_menu_volume:
                         if main_menu_buttons[3].checkForInput(pygame.mouse.get_pos()):
-                            self.menu.state_volume_menu=False
-                            self.sound_menu_state=False
+                            self.menu.state_menu_volume=False
                             sound_menu.stop()
                     else:
                         if main_menu_buttons[4].checkForInput(pygame.mouse.get_pos()):
-                            self.menu.state_volume_menu=True
-                            self.sound_menu_state=True
+                            self.menu.state_menu_volume=True              
                             sound_menu.play(-1)
                         
             

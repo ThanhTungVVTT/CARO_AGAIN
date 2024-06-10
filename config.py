@@ -1,16 +1,21 @@
 import pygame
 pygame.init()
-# Định nghĩa các màu ( cho dễ nhìn và sử dụng )
+
 WHITE=(255,255,255)
 BLACK=(0,0,0)
 RED=(255,0,0)
 BLUE=(0,0,255)
 BG_BOARD=(0,120,255)
+GRAY=(159,161,165)
+BACKGROUND_MENU_BUTTON=(71,43,58)
+TITLE_COLOR=(181,143,63)
+
 HIGHTLIGHT_COLOR=(255,234,167)
+
 X_COLOR_WIN=(52,87,154)
 O_COLOR_WIN=(187,33,41)
 
-# Định nghĩa các thông số cần thiết cho bảng chơi
+
 WIDTH=700
 HEIGHT=700
 OFFSET=200
@@ -41,8 +46,11 @@ image_options=pygame.image.load('assets/images/Options Rect.png')
 image_quit=pygame.image.load('assets/images/Quit Rect.png')
 
 volume_image_on=pygame.image.load('assets/images/volume_on.png')
-volume_image_on=pygame.transform.scale(volume_image_on,(50,50))
+volume_image_menu_on=pygame.image.load('assets/images/volume_on_menu.png')
 volume_image_off=pygame.image.load('assets/images/volume_off.png')
+volume_image_menu_off=pygame.image.load('assets/images/volume_off_menu.png')
+
+home_image=pygame.image.load('assets/images/home.png')
 
 sound_click_X_O=pygame.mixer.Sound('assets/sounds/click_X_O_sound.wav')
 sound_win=pygame.mixer.Sound('assets/sounds/sound_win.mp3')
@@ -60,5 +68,19 @@ group_O=pygame.image.load('assets/images/Group O.png')
 board_3x3=pygame.image.load('assets/images/3x3_board.png')
 board_7x7=pygame.image.load('assets/images/7x7_board.png')
 board_15x15=pygame.image.load('assets/images/15x15_board.png')
+
 def get_font(size):
     return pygame.font.Font("assets/fonts/font.ttf", size)
+
+
+help_image=pygame.image.load('assets/images/help.png')
+help_image=pygame.transform.scale(help_image,(350,350))
+
+
+
+instructions=["Place the number of pieces (depending on the grid type)",
+              "in a column, a row, or diagonally to win the game.",
+              "Grid 3x3: 3 pieces",
+              "Grid 7x7: 4 pieces",
+              "Grid 15x15: 5 pieces"]
+

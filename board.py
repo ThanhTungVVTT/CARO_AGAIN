@@ -1,5 +1,4 @@
 from player import Player
-from timer_countdown import CountdownTimer
 import pygame
 from config import *
 
@@ -16,7 +15,8 @@ class Board:
         self.last_mark=None
         self.SQ_SIZE=WIDTH//self.size
         self.ADD_WIDTH=300
-        
+
+
     def draw_board(self,screen):
         '''
         Vẽ bảng chơi lên màn hình
@@ -69,34 +69,49 @@ class Board:
                     screen.blit(O_image_win_7x7,(col*self.SQ_SIZE+self.SQ_SIZE//2-O_image_win_7x7.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-O_image_win_7x7.get_height()//2))
                 elif self.size==15:
                     screen.blit(O_image_win_15x15,(col*self.SQ_SIZE+self.SQ_SIZE//2-O_image_win_15x15.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-O_image_win_15x15.get_height()//2))
-    
+
     def draw_player(self,screen,player,current_player_symbol,timers):
         '''
         Vẽ thông tin người chơi lên màn hình
         '''
 
+        
         for i,player in enumerate(player):
-            avatar_pos=(WIDTH+150,80+i*160)
+            avatar_pos=(WIDTH+150,80+i*250)
             elapsed_time=timers[i]
-            font=get_font(15)
+            font=get_font(20)
             time_text=font.render(f"Time left:{elapsed_time}",True,BLACK)
+            score_text=font.render(f"Score:{player.get_score()}",True,BLACK)
 
             if player.symbol=="X":
                 avatar_X_pos=avatar_X.get_rect(center=avatar_pos)
                 screen.blit(avatar_X,avatar_X_pos)
+                
                 group_X_pos=(avatar_X_pos.right-group_X.get_width(),avatar_X_pos.bottom-group_X.get_height())
                 screen.blit(group_X,group_X_pos)
-                time_text_center=(avatar_X_pos.centerx,avatar_X_pos.bottom+10)
+                
+                time_text_center=(avatar_X_pos.centerx,avatar_X_pos.bottom+15)
                 time_text_rect=time_text.get_rect(midtop=time_text_center)
                 screen.blit(time_text,time_text_rect)
+                
+                score_text_center=(avatar_X_pos.centerx,avatar_X_pos.bottom+45)
+                score_text_rect=score_text.get_rect(midtop=score_text_center)
+                screen.blit(score_text,score_text_rect)
+
             else:
                 avatar_O_pos=avatar_O.get_rect(center=avatar_pos)
                 screen.blit(avatar_O,avatar_O_pos)
+                
                 group_O_pos=(avatar_O_pos.right-group_O.get_width(),avatar_O_pos.bottom-group_O.get_height())
                 screen.blit(group_O,group_O_pos)
-                time_text_center=(avatar_O_pos.centerx,avatar_O_pos.bottom+10)
+                
+                time_text_center=(avatar_O_pos.centerx,avatar_O_pos.bottom+15)
                 time_text_rect=time_text.get_rect(midtop=time_text_center)
                 screen.blit(time_text,time_text_rect)
+
+                score_text_center=(avatar_O_pos.centerx,avatar_O_pos.bottom+45)
+                score_text_rect=score_text.get_rect(midtop=score_text_center)
+                screen.blit(score_text,score_text_rect)
 
             if player.symbol == current_player_symbol:
                 ARROW_SIZE=35
@@ -113,6 +128,7 @@ class Board:
 
                 pygame.draw.polygon(screen, WHITE, arrow_shape)
                 
+        
                       
 
 

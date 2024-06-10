@@ -5,17 +5,13 @@ board=Board()
 import pygame,sys
 pygame.init()
 
-
-def get_font(size): # Returns Press-Start-2P in the desired size
-    return pygame.font.Font("assets/fonts/font.ttf", size)
-
-
 class Menu:
     def __init__(self, screen, board):
         self.screen = screen
         self.board = board
         self.state_volume=True
-        self.state_volume_menu=True
+        self.state_menu_volume=True
+        
 
     def create_button(self, image, pos, text_input, font, base_color, hovering_color):
         return Button(image, pos, text_input, font, base_color, hovering_color)
@@ -74,31 +70,44 @@ class Menu:
 
     def draw_option_menu(self):
         option_buttons=[
-            self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2-50),"GRID",get_font(40),"#d7fcd4",(0,0,200)),
-            self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+190),"HELP",get_font(40),"#d7fcd4",(0,0,200)),
-            self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+310),"BACK",get_font(40),"#d7fcd4",(200,0,0))
+            self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2-50),"GRID",get_font(40),"#d7fcd4",GRAY),
+            self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+50),"HELP",get_font(40),"#d7fcd4",GRAY),
+            self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+150),"BACK",get_font(40),"#d7fcd4",GRAY)
         ]
 
         self.screen.blit(back_ground_image,(0,0))
-        OPTION_TEXT=get_font(50).render("OPTIONS",True,(255,255,255))
+        OPTION_TEXT=get_font(50).render("OPTIONS",True,TITLE_COLOR)
         OPTION_RECT=OPTION_TEXT.get_rect(center=(((WIDTH+board.ADD_WIDTH)//2),HEIGHT//2-200))
         self.screen.blit(OPTION_TEXT,OPTION_RECT)    
         for button in option_buttons:
             button.changeColor(pygame.mouse.get_pos())
-            button.update(self.screen)
+            button.zoom_in_text(pygame.mouse.get_pos(),self.screen)
         return option_buttons
     
     def show_help_button(self):
         help_buttons=[
-            self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+200),"BACK",get_font(40),"#d7fcd4",(200,0,0))
+            self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT-70),"BACK",get_font(40),"#d7fcd4",GRAY)
         ]
         self.screen.blit(back_ground_image,(0,0))
-        HELP_TEXT=get_font(50).render("RULE THE GAME",True,(255,255,255))
-        HELP_RECT=HELP_TEXT.get_rect(center=(((WIDTH+board.ADD_WIDTH)//2),HEIGHT//2-200))
+        HELP_TEXT=get_font(50).render("GAME RULES",True,TITLE_COLOR)
+        HELP_RECT=HELP_TEXT.get_rect(center=(((WIDTH+board.ADD_WIDTH)//2),HEIGHT//2-250))
+        font_help=pygame.font.Font(None,30)
+        instruction_text1=font_help.render(instructions[0],True,(255,255,255))
+        instruction_text2=font_help.render(instructions[1],True,(255,255,255))
+        instruction_text3=font_help.render(instructions[2],True,(255,255,255))
+        instruction_text4=font_help.render(instructions[3],True,(255,255,255))
+        instruction_text5=font_help.render(instructions[4],True,(255,255,255))
+        instructions_help=[instruction_text1,instruction_text2,instruction_text3,instruction_text4,instruction_text5]
+        for instruction in instructions_help:
+            instruction_rect=instruction.get_rect(center=((WIDTH+board.ADD_WIDTH)//2+200,HEIGHT//2-100+instructions_help.index(instruction)*50))
+            self.screen.blit(instruction,instruction_rect) 
+
         self.screen.blit(HELP_TEXT,HELP_RECT)
+        self.screen.blit(help_image,(50,HEIGHT//2-150))
         for button in help_buttons:
             button.changeColor(pygame.mouse.get_pos())
-            button.update(self.screen)
+            button.zoom_in_text(pygame.mouse.get_pos(),self.screen)
+
         return help_buttons
 
 
@@ -109,7 +118,7 @@ class Menu:
             self.create_button(board_15x15,(812,HEIGHT//2+50),None,get_font(40),"#d7fcd4",(200,0,0)),
         ]
         self.screen.blit(back_ground_image,(0,0))
-        GRID_TEXT=get_font(50).render("CHOOSE A GRID",True,(255,255,255))
+        GRID_TEXT=get_font(50).render("CHOOSE A GRID",True,TITLE_COLOR)
         GRID_RECT=GRID_TEXT.get_rect(center=(((WIDTH+board.ADD_WIDTH)//2),HEIGHT//2-200))
         self.screen.blit(GRID_TEXT,GRID_RECT)
         for button in grid_buttons:
@@ -119,21 +128,23 @@ class Menu:
     
     def draw_main_menu(self):
         board_buttons=[
-            self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2-50),"PLAY",get_font(40),"#d7fcd4",(0,0,200)),
-            self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+70),"OPTIONS",get_font(40),"#d7fcd4",(0,200,0)),
-            self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+190),"QUIT",get_font(40),"#d7fcd4",(200,0,0)),
-            self.create_button(volume_image_on,(WIDTH + board.ADD_WIDTH - 150, HEIGHT - 50),None,get_font(40),"black",(0,0,200)),
-            self.create_button(volume_image_off,(WIDTH + board.ADD_WIDTH - 150, HEIGHT - 50),None,get_font(40),"black",(0,0,200))
+            self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2-40),"PLAY",get_font(40),"#d7fcd4",GRAY),
+            self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+60),"OPTIONS",get_font(40),"#d7fcd4",GRAY),
+            self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+160),"QUIT",get_font(40),"#d7fcd4",GRAY),
+            self.create_button(volume_image_menu_on,(WIDTH + board.ADD_WIDTH - 60, 50),None,get_font(40),"black",(0,0,200)),
+            self.create_button(volume_image_menu_off,(WIDTH + board.ADD_WIDTH - 60, 50),None,get_font(40),"black",(0,0,200))
         ]
         self.screen.blit(back_ground_image,(0,0))
-        MENU_TEXT=get_font(50).render("CARO GAME",True,(255,255,255))
+        MENU_TEXT=get_font(60).render("CARO GAME",True,TITLE_COLOR)
         MENU_RECT=MENU_TEXT.get_rect(center=(((WIDTH+board.ADD_WIDTH)//2),HEIGHT//2-200))
         self.screen.blit(MENU_TEXT,MENU_RECT)
-
+        
         for button in board_buttons[0:3]:
             button.changeColor(pygame.mouse.get_pos())
-            button.update(self.screen)
-        if self.state_volume_menu:
+            button.zoom_in_text(pygame.mouse.get_pos(),self.screen)
+            
+            
+        if self.state_menu_volume:
             board_buttons[3].update(self.screen)
         else:
             board_buttons[4].update(self.screen)
@@ -142,9 +153,9 @@ class Menu:
 
     def draw_board_buttons(self):
         board_buttons=[
-            self.create_button(volume_image_on,(WIDTH + board.ADD_WIDTH - 150, HEIGHT - 50),None,get_font(40),"black",(0,0,200)),
-            self.create_button(volume_image_off,(WIDTH + board.ADD_WIDTH - 150, HEIGHT - 50),None,get_font(40),"black",(0,0,200)),
-            self.create_button(None,(WIDTH + board.ADD_WIDTH - 150, HEIGHT - 100),"MENU",get_font(40),"black",(255,0,0))
+            self.create_button(volume_image_on,(WIDTH + 80, HEIGHT - 50),None,get_font(40),"black",(0,0,200)),
+            self.create_button(volume_image_off,(WIDTH + 80, HEIGHT - 50),None,get_font(40),"black",(0,0,200)),
+            self.create_button(home_image,(WIDTH + board.ADD_WIDTH-80, HEIGHT - 50),None,get_font(40),"black",(255,0,0))
         ]
         board_buttons[2].changeColor(pygame.mouse.get_pos())
         board_buttons[2].update(self.screen)
@@ -153,4 +164,3 @@ class Menu:
         else:
             board_buttons[1].update(self.screen)
         return board_buttons
-    
