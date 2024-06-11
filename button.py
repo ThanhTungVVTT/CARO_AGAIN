@@ -3,7 +3,14 @@ pygame.init()
 
 
 class Button():
+	'''
+	Lớp Button đại diện cho một nút trong giao diện người dùng
+	Mỗi nút có hình ảnh,vị trí, văn bản,font chứ, màu sắc cơ bản và màu sắc khi di chuột qua.
+	'''
 	def __init__(self, image, pos, text_input, font, base_color, hovering_color):
+		'''
+		Khởi tạo nút với các thông số truyền vào
+		'''
 		self.image = image
 		self.x_pos = pos[0]
 		self.y_pos = pos[1]
@@ -16,12 +23,18 @@ class Button():
 		self.rect = self.image.get_rect(center=(self.x_pos, self.y_pos))
 		self.text_rect = self.text.get_rect(center=(self.x_pos, self.y_pos))
 
-	def update(self, screen):
+	def update_button(self, screen):
+		'''
+		Cập nhật và vẽ nút trên màn hình
+		'''
 		if self.image:
 			self.highlight_image(pygame.mouse.get_pos(), screen)
 		screen.blit(self.text, self.text_rect)
 
 	def zoom_in_text(self,position,screen):
+		'''
+		Phóng to văn bản khi chuột di chuyển vào vùng nút.
+		'''
 		if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
 			text_1=self.text.copy()
 			text_surf = pygame.transform.scale_by(text_1, 1.4)
@@ -33,6 +46,9 @@ class Button():
 			screen.blit(self.text, self.text_rect)
 
 	def highlight_image(self,position,screen):
+		'''
+		Tạo hiệu ứng nổi bật khi chuột di chuyển vào vùng nút.
+		'''
 		if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
 			highlight_image=pygame.Surface((self.rect.width+15,self.rect.height+15),pygame.SRCALPHA)
 			highlight_image.fill((240,228,212,128))
@@ -43,11 +59,17 @@ class Button():
 			screen.blit(self.image, self.rect)
 			
 	def checkForInput(self, position):
+		'''
+		Kiểm tra vị trí chuột có nằm trong vùng nút không
+		'''
 		if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
 			return True
 		return False
 
 	def changeColor(self, position):
+		'''
+		Thay đổi màu sắc của văn bản khi chuột di chuyển vào vùng nút.
+		'''
 		if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
 			self.text = self.font.render(self.text_input, True, self.hovering_color)
 		else:

@@ -18,7 +18,13 @@ menu = Menu(screen, board)
 
 
 class Game:
+    '''
+    Lớp Game quản lý trạng thái và logic của trò chơi cờ caro.
+    '''
     def __init__(self, screen, board_size):
+        '''
+        Khởi tạo trạng thái của trò chơi
+        '''
         self.screen = screen
         self.board = Board(board_size)
         self.players = [Player("Player 1", "X"), Player("Player 2", "O")]
@@ -31,19 +37,34 @@ class Game:
         pygame.time.set_timer(self.TIME_EVENT, 1000)
 
     def reset_timer(self):
+        '''
+        Đặt lại thời gian cho người chơi
+        '''
         self.timers = {0: self.players[0].time, 1: self.players[1].time}
 
     def increase_score(self, player):
+        '''
+        Tăng điểm cho người chơi chiến thắng
+        '''
         player.score += 1
 
     def switch_player(self):
+        '''
+        Chuyển lượt chơi cho người chơi khác
+        '''
         self.current_player_index = 1 - self.current_player_index
         self.reset_timer()
 
     def get_current_player(self):
+        '''
+        Lấy người chơi hiện tại
+        '''
         return self.players[self.current_player_index]
 
     def handle_click(self, row, col):
+        '''
+        Xử lý sự kiện click chuột
+        '''
         player = self.get_current_player()
         if self.board.temp_mark == (row, col):
             if self.board.update(row, col, player.symbol):
@@ -51,7 +72,7 @@ class Game:
                 self.draw_on_board(self.screen)
                 pygame.display.update()
                 if self.board.check_win():
-                    if self.menu.state_volume:
+                    if self.menu.state_board_volume:
                         sound_win.play()
                     pygame.time.wait(1000)
                     self.winner = player
@@ -74,6 +95,9 @@ class Game:
         return False
 
     def check_time(self):
+        '''
+        Kiểm tra thời gian chơi còn lại của người chơi
+        '''
         if self.winner:
             self.timers[self.current_player_index] = self.players[
                 self.current_player_index
@@ -84,9 +108,11 @@ class Game:
                 self.switch_player()
 
     def draw_on_board(self, screen):
-
+        '''
+        Vẽ trạng thái của bảng chơi và thông tin người chơi lên màn hình 
+        '''
         self.board.draw_board(screen)
-        self.board.draw_player(
+        self.board.draw_info_player(
             screen,
             self.players,
             self.get_current_player().symbol,
@@ -96,12 +122,18 @@ class Game:
             self.menu.draw_button_in_board()
 
     def reset(self):
+        '''
+        Đặt lại trạng thái của trò chơi
+        '''
         self.board = Board(self.board.size)
         self.current_player_index = 0
         self.winner = None
         self.reset_timer()
 
     def game_board(self, board_size):
+        '''
+        Chạy trò chơi cờ caro
+        '''
         self.__init__(self.screen, board_size)
         pause = False
         while True:
@@ -115,7 +147,7 @@ class Game:
                     x, y = pygame.mouse.get_pos()
                     row, col = y // self.board.SQ_SIZE, x // self.board.SQ_SIZE
                     if 0 <= row < self.board.size and 0 <= col < self.board.size:
-                        if self.menu.state_volume:
+                        if self.menu.state_board_volume:
                             sound_click_X_O.play()
                         self.handle_click(row, col)
 
@@ -128,14 +160,14 @@ class Game:
                         else:
                             pause = False
 
-                    if self.menu.state_volume:
+                    if self.menu.state_board_volume:
                         if board_buttons[0].checkForInput((x, y)):
-                            self.menu.state_volume = False
+                            self.menu.state_board_volume = False
                             self.sound_state = False
 
                     else:
                         if board_buttons[1].checkForInput((x, y)):
-                            self.menu.state_volume = True
+                            self.menu.state_board_volume = True
                             self.sound_state = True
 
             self.draw_on_board(self.screen)
@@ -143,7 +175,10 @@ class Game:
             pygame.display.update()
             clock.tick(60)
 
-    def option_menu(self):
+    def show_option_menu(self):
+        '''
+        Hiển thị menu tùy chọn
+        '''
         while True:
             option_buttons = self.menu.draw_option_menu()
             for event in pygame.event.get():
@@ -163,6 +198,9 @@ class Game:
             clock.tick(60)
 
     def show_help(self):
+        '''
+        Hiển thị hướng dẫn luật chơi cờ caro
+        '''
         while True:
             help_buttons = self.menu.show_help_button()
             for event in pygame.event.get():
@@ -172,11 +210,14 @@ class Game:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     sound_click.play()
                     if help_buttons[0].checkForInput(pygame.mouse.get_pos()):
-                        self.option_menu()
+                        self.show_option_menu()
             pygame.display.update()
             clock.tick(60)
 
     def choose_grid(self):
+        '''
+        Chọn kích thước bàn cờ
+        '''
         global board_size
         while True:
             grid_buttons = self.menu.draw_choose_grid()
@@ -199,6 +240,9 @@ class Game:
             clock.tick(60)
 
     def run(self):
+        '''
+        Chạy trò chơi
+        '''
         if not pygame.mixer.get_busy():
             sound_menu.play(-1)
         while True:
@@ -214,7 +258,7 @@ class Game:
                         self.game_board(board_size)
                         return
                     if main_menu_buttons[1].checkForInput(pygame.mouse.get_pos()):
-                        self.option_menu()
+                        self.show_option_menu()
                         return
                     if main_menu_buttons[2].checkForInput(pygame.mouse.get_pos()):
                         pygame.quit()

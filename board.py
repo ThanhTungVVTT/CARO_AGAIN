@@ -1,13 +1,15 @@
-from player import Player
 import pygame
 from config import *
 
 
 
 class Board:
+    '''
+    Lớp Board đại diện cho bảng chơi cờ caro ( vẽ bảng, thông tin người chơi, kiểm tra thắng thua)
+    '''
     def __init__(self,size=15):
         '''
-        Khởi tạo bàn cờ với kích thước mặc định 15x15,grid là ma trận để lưu trữ các dấu X,O
+        Khởi tạo bảng chơi với kích thước cho trước
         '''
         self.size=size
         self.grid=[['' for _ in range(size)] for _ in range(size)]
@@ -52,6 +54,9 @@ class Board:
 
 
     def draw_when_win(self,screen,winning_squares):
+        '''
+        Vẽ lại bảng chơi khi có người chơi thắng
+        '''
         for row,col in winning_squares:
             if self.grid[row][col]=='X':
                 pygame.draw.rect(screen,X_COLOR_WIN,(col*self.SQ_SIZE+1,row*self.SQ_SIZE+1,self.SQ_SIZE-2,self.SQ_SIZE-2))
@@ -70,12 +75,10 @@ class Board:
                 elif self.size==15:
                     screen.blit(O_image_win_15x15,(col*self.SQ_SIZE+self.SQ_SIZE//2-O_image_win_15x15.get_width()//2,row*self.SQ_SIZE+self.SQ_SIZE//2-O_image_win_15x15.get_height()//2))
 
-    def draw_player(self,screen,player,current_player_symbol,timers):
+    def draw_info_player(self,screen,player,current_player_symbol,timers):
         '''
         Vẽ thông tin người chơi lên màn hình
         '''
-
-        
         for i,player in enumerate(player):
             avatar_pos=(WIDTH+150,80+i*250)
             elapsed_time=timers[i]
@@ -129,6 +132,9 @@ class Board:
                 pygame.draw.polygon(screen, WHITE, arrow_shape)
                   
     def is_full(self):
+        '''
+        Kiểm tra xem bảng đã đầy chưa
+        '''
         for row in range(self.size):
             for col in range(self.size):
                 if self.grid[row][col]=='':
@@ -160,7 +166,7 @@ class Board:
     
     def check_cell(self,row,col):
         '''
-        Kiểm tra xem có 5 ký hiệu liên tiếp theo hàng ngang, hàng dọc,đường chéo không
+        Kiểm tra xem số lượng ký hiệu liên tiếp theo một hướng nhất định có đủ để thắng chưa
         '''
         if self.size==15:
             win_count=5

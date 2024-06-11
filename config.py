@@ -1,6 +1,8 @@
 import pygame
 pygame.init()
 
+
+# Các màu sắc cơ bản được sử dụng trong suốt trò chơi
 WHITE=(255,255,255)
 BLACK=(0,0,0)
 RED=(255,0,0)
@@ -14,7 +16,7 @@ HIGHTLIGHT_COLOR=(255,234,167)
 X_COLOR_WIN=(52,87,154)
 O_COLOR_WIN=(187,33,41)
 
-
+# Kích thước cửa sổ
 WIDTH=700
 HEIGHT=700
 OFFSET=200
@@ -37,7 +39,7 @@ O_image_3x3=pygame.image.load('assets/images/O_3x3.png')
 X_image_win_3x3=pygame.image.load('assets/images/X_WIN_3X3.png')
 O_image_win_3x3=pygame.image.load('assets/images/O_WIN_3X3.png')
 
-
+# tải hình ảnh background, volume, home, sound, avatar, group, board, help
 back_ground_image=pygame.image.load('assets/images/Background.png')
 
 volume_image_on=pygame.image.load('assets/images/volume_on.png')
@@ -67,11 +69,11 @@ board_15x15=pygame.image.load('assets/images/15x15_board.png')
 help_image=pygame.image.load('assets/images/help.png')
 help_image=pygame.transform.scale(help_image,(350,350))
 
-
+# Tạo font chữ
 def get_font(size,font_name,font_type):
     return pygame.font.Font(f"assets/fonts/{font_name}.{font_type}", size)
 
-
+# Dòng chữ hướng dẫn luật chơi
 instructions=["Place the number of pieces (depending on the grid type)",
               "in a column, a row, or diagonally to win the game.",
               "Grid 3x3: 3 pieces",

@@ -6,17 +6,29 @@ import pygame,sys
 pygame.init()
 
 class Menu:
+    '''
+    Lớp Menu quản lý các tùy chọn menu trong trò chơi    
+    '''
     def __init__(self, screen, board):
+        '''
+        Khởi tạo menu với màn hình và bảng chơi
+        '''
         self.screen = screen
         self.board = board
-        self.state_volume=True
+        self.state_board_volume=True
         self.state_menu_volume=True
         
 
     def create_button(self, image, pos, text_input, font, base_color, hovering_color):
+        '''
+        Tạo một nút mới
+        '''
         return Button(image, pos, text_input, font, base_color, hovering_color)
     
     def confirm_quit(self):
+        '''
+        Hiển thị thông báo xác nhận thoát game
+        '''
         confirm_buttons=[
             self.create_button(None,(WIDTH//2,HEIGHT//2),"YES",get_font(40,"Designer","otf"),BLACK,(0,0,200)),
             self.create_button(None,(WIDTH//2,HEIGHT//2+60),"NO",get_font(40,"Designer","otf"),BLACK,(0,0,200))
@@ -38,11 +50,14 @@ class Menu:
             confirm_text = get_font(45,"Designer","otf").render("ARE YOU SURE?", True, BLACK)
             self.screen.blit(confirm_text, (WIDTH // 2 - confirm_text.get_width() // 2, HEIGHT // 3 + 20))
             for button in confirm_buttons:
-                button.update(self.screen)
+                button.update_button(self.screen)
             pygame.display.update()
             pygame.time.Clock().tick(60)
 
     def show_winner(self, winner):
+        '''
+        Hiển thị thông báo người chiến thắng
+        '''
         winner_buttons=[
             self.create_button(None,(WIDTH//2,HEIGHT//2),"PLAY AGAIN",get_font(40,"Designer","otf"),BLACK,(0,0,200)),
             self.create_button(None,(WIDTH//2,HEIGHT//2+60),"MENU",get_font(40,"Designer","otf"),BLACK,(0,0,200))
@@ -65,13 +80,16 @@ class Menu:
             
             self.screen.blit(winner_text,(WIDTH//2-winner_text.get_width()//2,HEIGHT//2-100))
             for button in winner_buttons:
-                button.update(self.screen)
+                button.update_button(self.screen)
             
             pygame.display.update()
             pygame.time.Clock().tick(60)
         
 
     def draw_option_menu(self):
+        '''
+        Vẽ menu tùy chọn
+        '''
         option_buttons=[
             self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2-50),"GRID",get_font(40,"font","ttf"),BUTTON_COLOR,GRAY),
             self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+50),"HELP",get_font(40,"font","ttf"),BUTTON_COLOR,GRAY),
@@ -88,6 +106,9 @@ class Menu:
         return option_buttons
     
     def show_help_button(self):
+        '''
+        Vẽ màn hình hướng dẫn chơi game
+        '''
         help_buttons=[
             self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT-70),"BACK",get_font(40,"font","ttf"),BUTTON_COLOR,GRAY)
         ]
@@ -116,6 +137,9 @@ class Menu:
 
 
     def draw_choose_grid(self):
+        '''
+        Vẽ màn hình chọn kích thước bảng chơi
+        '''
         grid_buttons=[
             self.create_button(board_3x3,(182,HEIGHT//2+50),None,get_font(40,"font","ttf"),BUTTON_COLOR,(0,0,200)),
             self.create_button(board_7x7,(498,HEIGHT//2+50),None,get_font(40,"font","ttf"),BUTTON_COLOR,(0,200,0)),
@@ -127,10 +151,13 @@ class Menu:
         self.screen.blit(GRID_TEXT,GRID_RECT)
         for button in grid_buttons:
             button.changeColor(pygame.mouse.get_pos())
-            button.update(self.screen)
+            button.update_button(self.screen)
         return grid_buttons
     
     def draw_main_menu(self):
+        '''
+        Vẽ màn hình menu chính
+        '''
         board_buttons=[
             self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2-30),"PLAY",get_font(40,"font","ttf"),BUTTON_COLOR,GRAY),
             self.create_button(None,((WIDTH+board.ADD_WIDTH)//2,HEIGHT//2+80),"OPTIONS",get_font(40,"font","ttf"),BUTTON_COLOR,GRAY),
@@ -149,22 +176,28 @@ class Menu:
             
             
         if self.state_menu_volume:
-            board_buttons[3].update(self.screen)
+            board_buttons[3].update_button(self.screen)
         else:
-            board_buttons[4].update(self.screen)
+            board_buttons[4].update_button(self.screen)
 
         return board_buttons
 
     def draw_button_in_board(self):
+        '''
+        Vẽ các nút điều khiển trong bảng chơi.
+        '''
         board_buttons=[
             self.create_button(volume_image_on,(WIDTH + 80, HEIGHT - 50),None,get_font(40,"font","ttf"),BLACK,(0,0,200)),
             self.create_button(volume_image_off,(WIDTH + 80, HEIGHT - 50),None,get_font(40,"font","ttf"),BLACK,(0,0,200)),
             self.create_button(home_image,(WIDTH + board.ADD_WIDTH-80, HEIGHT - 50),None,get_font(40,"font","ttf"),BLACK,(0,0,200))
         ]
         board_buttons[2].changeColor(pygame.mouse.get_pos())
-        board_buttons[2].update(self.screen)
-        if self.state_volume:
-            board_buttons[0].update(self.screen)
+        board_buttons[2].update_button(self.screen)
+        if self.state_board_volume:
+            board_buttons[0].update_button(self.screen)
         else:
-            board_buttons[1].update(self.screen)
+            board_buttons[1].update_button(self.screen)
         return board_buttons
+
+
+
